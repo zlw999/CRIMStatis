@@ -1,8 +1,10 @@
 package com.crims.apps.service.state;
 
 import com.crims.apps.dao.state.StateStatisticsDao;
+import com.crims.apps.model.alarminfo.Alarminfo;
 import com.crims.apps.model.state.AlarmInfoVO;
 import com.crims.apps.model.state.DeviceStatStateInfoVO;
+import com.crims.apps.model.state.FaultlevelStatInfoVO;
 import com.crims.apps.model.state.StationInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,5 +59,15 @@ public class StateStatisticsServiceImpl implements StateStatisticsService {
     @Override
     public List<AlarmInfoVO> getTodoProcessAlarmInfoByAlarmAffirmTime() {
         return stateStatisticsDao.getTodoProcessAlarmInfoByAlarmAffirmTime();
+    }
+
+    @Override
+    public List<FaultlevelStatInfoVO> findStationforFault() {
+        return stateStatisticsDao.findStationforFault();
+    }
+
+    @Override
+    public List<Alarminfo> tjAlarminfo(String id) {
+        return stateStatisticsDao.tjAlarminfo(id);
     }
 }

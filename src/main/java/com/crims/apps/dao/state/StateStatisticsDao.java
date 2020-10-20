@@ -1,7 +1,9 @@
 package com.crims.apps.dao.state;
 
+import com.crims.apps.model.alarminfo.Alarminfo;
 import com.crims.apps.model.state.AlarmInfoVO;
 import com.crims.apps.model.state.DeviceStatStateInfoVO;
+import com.crims.apps.model.state.FaultlevelStatInfoVO;
 import com.crims.apps.model.state.StationInfoVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -26,4 +28,8 @@ public interface StateStatisticsDao {
     List<AlarmInfoVO> getTodoProcessAlarmInfoByAlarmDisTime();
 
     List<AlarmInfoVO> getTodoProcessAlarmInfoByAlarmAffirmTime();
+
+    List<FaultlevelStatInfoVO> findStationforFault();
+
+    List<Alarminfo> tjAlarminfo(@Param("id") String id);
 }

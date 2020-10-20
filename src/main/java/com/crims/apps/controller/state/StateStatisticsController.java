@@ -2,8 +2,10 @@ package com.crims.apps.controller.state;
 
 import com.crims.apps.config.CodeMsg;
 import com.crims.apps.config.Result;
+import com.crims.apps.model.alarminfo.Alarminfo;
 import com.crims.apps.model.state.AlarmInfoVO;
 import com.crims.apps.model.state.DeviceStatStateInfoVO;
+import com.crims.apps.model.state.FaultlevelStatInfoVO;
 import com.crims.apps.model.state.StationInfoVO;
 import com.crims.apps.service.state.StateStatisticsService;
 import com.crims.dbconfig.DataSourceContextHolder;
@@ -267,5 +269,78 @@ public class StateStatisticsController {
         }
 
         return null;
+    }
+
+    @GetMapping("/getFaultLevelStatInfo")
+    @ApiOperation(value = "获取指定线路下的各车站的按级别分类的告警统计")
+    public List<FaultlevelStatInfoVO> GetFaultLevelStatInfo(@RequestParam(required = true,defaultValue = "000000") String lineId)
+    {
+        /*
+         *   从设备表中统计设备数量；
+         *   从告警表中统计离线数和故障数(同一个设备的不同类型的故障算一个故障)；
+
+         *   lineId:XXXXXX,若为000000，表示所有线路；若为XXXX00或XXXX,表示XXXX的线路;
+         *
+         */
+        if(lineId.equals("000000")){
+            //查询所有线路下的车站故障级别
+            //首先在nodearea表里查询出所有车站 再通过车站的stationid 获取他的线路id
+            DataSourceContextHolder.setKey("crimsdbs");
+            List<FaultlevelStatInfoVO> list = stateStatisticsService.findStationforFault();
+            for (FaultlevelStatInfoVO vo : list) {
+                String lineName = stateStatisticsService.findNodeNameById(vo.getStationId().substring(0, 4));
+                vo.setLineId(vo.getStationId().substring(0, 4));
+                vo.setLineName(lineName);
+            }
+            DataSourceContextHolder.clearKey();
+            for (FaultlevelStatInfoVO faultVo : list) {
+                String id=faultVo.getStationId();
+               List<Alarminfo> newList = stateStatisticsService.tjAlarminfo(id);
+                for (Alarminfo alarminfo : newList) {
+                    if(alarminfo.getAlarmlevel().equals("02")){
+                        faultVo.setTwolevelNum(alarminfo.getCounts());
+                    }else if(alarminfo.getAlarmlevel().equals("03")){
+                        faultVo.setThreelevelNum(alarminfo.getCounts());
+                    }else if(alarminfo.getAlarmlevel().equals("04")){
+                        faultVo.setFourlevelNum(alarminfo.getCounts());
+                    }else{
+                        faultVo.setOtherlevelNum(alarminfo.getCounts());
+                    }
+                }
+            }
+            return list;
+        }else{
+            //否则会传一个线路 查询这个线路下的故障级别
+            DataSourceContextHolder.setKey("crimsdbs");
+            String lineName = stateStatisticsService.findNodeNameById(lineId);
+            List<DeviceStatStateInfoVO> list = stateStatisticsService.getDeviceStatStateInfoVO(lineId);
+
+            ArrayList<FaultlevelStatInfoVO> newlist = new ArrayList<>();
+            for (DeviceStatStateInfoVO stationInfoVO : list) {
+                FaultlevelStatInfoVO infoVO = new FaultlevelStatInfoVO();
+                infoVO.setLineId(lineId);
+                infoVO.setLineName(lineName);
+                infoVO.setStationId(stationInfoVO.getLineId());
+                infoVO.setStationName(stationInfoVO.getLineName());
+                newlist.add(infoVO);
+            }
+            DataSourceContextHolder.clearKey();
+            for (FaultlevelStatInfoVO faultVo : newlist) {
+                String id=faultVo.getStationId();
+                List<Alarminfo> list1 = stateStatisticsService.tjAlarminfo(id);
+                for (Alarminfo alarminfo : list1) {
+                    if(alarminfo.getAlarmlevel().equals("02")){
+                        faultVo.setTwolevelNum(alarminfo.getCounts());
+                    }else if(alarminfo.getAlarmlevel().equals("03")){
+                        faultVo.setThreelevelNum(alarminfo.getCounts());
+                    }else if(alarminfo.getAlarmlevel().equals("04")){
+                        faultVo.setFourlevelNum(alarminfo.getCounts());
+                    }else{
+                        faultVo.setOtherlevelNum(alarminfo.getCounts());
+                    }
+                }
+            }
+            return newlist;
+        }
     }
 }

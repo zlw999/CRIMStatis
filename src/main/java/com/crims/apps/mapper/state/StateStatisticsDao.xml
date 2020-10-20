@@ -41,5 +41,16 @@
     <select id="getTodoProcessAlarmInfoByAlarmAffirmTime" resultType="com.crims.apps.model.state.AlarmInfoVO">
         select * from rec_alarminfo where AlarmAffirmTime='2000-01-01 01:01:01'
     </select>
+    <resultMap id="findsForFault" type="com.crims.apps.model.state.FaultlevelStatInfoVO">
+        <id column="nodeid" property="stationId"></id>
+        <result column="nodename" property="stationName"></result>
+    </resultMap>
+    <select id="findStationforFault" resultMap="findsForFault">
+         select nodeid,nodename from conf_nodearea where length(nodeid)=6
+    </select>
+    <select id="tjAlarminfo" resultType="com.crims.apps.model.alarminfo.Alarminfo" parameterType="String">
+        SELECT count(*) as counts,AlarmLevel FROM `rec_alarminfo` where
+        deviceid like '${id}%' group by AlarmLevel
+    </select>
 </mapper>
 
