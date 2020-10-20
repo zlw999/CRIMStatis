@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crims.apps.dao.maintainlog.RecMaintainlogDao">
+
+    <select id="findAllLog" resultType="com.crims.apps.model.maintainlog.RecMaintainlog">
+        select * from rec_maintainlog
+    </select>
+    <select id="findMaintaintime" parameterType="String" resultType="com.crims.apps.model.maintainlog.RecMaintainlog">
+        select * from rec_maintainlog where deviceid = #{key}
+    </select>
+    <select id="findMaintaintime1" parameterType="String" resultType="com.crims.apps.model.maintainlog.RecMaintainlog">
+        select * from rec_maintainlog where deviceid = #{key}
+    </select>
+    <select id="findDevicename" resultType="String" parameterType="String">
+        select distinct devicename from rec_maintainlog where deviceid = #{key}
+    </select>
+
+
+
+    <select id="findMainlog" resultType="com.crims.apps.model.maintainlog.RecMaintainlog" parameterType="com.crims.apps.model.maintainlog.RecMaintainlogtj">
+        SELECT
+m.devicename AS devicename,
+m.maintainuser AS `maintainuser`,
+Count(m.deviceid) AS counts,
+Sum(m.score)/Count(m.deviceid) AS avgscore,
+m.maintaintime AS maintaintime,
+m.deviceid AS deviceid,
+m.maintainuserid AS maintainuserid
+
+FROM
+rec_maintainlog AS m
+<where>
+
+    <if test="start!=null and end!=null">
+        and maintaintime between #{start} and #{end}
+    </if>
+
+</where>
+GROUP BY
+m.deviceid,
+m.maintainuserid
+    </select>
+
+
+    <select id="findMainlogCondition" resultType="com.crims.apps.model.maintainlog.RecMaintainlog" parameterType="com.crims.apps.model.maintainlog.RecMaintainlogtj">
+        SELECT
+        m.devicename AS devicename,
+        m.maintainuser AS `maintainuser`,
+        Count(m.deviceid) AS counts,
+        Sum(m.score)/Count(m.deviceid) AS avgscore,
+        m.maintaintime AS maintaintime,
+        m.deviceid AS deviceid,
+        m.maintainuserid AS maintainuserid
+
+        FROM
+        rec_maintainlog AS m
+        <where>
+            <if test="did!=null and did!=''">
+                and deviceid like '%${did}%'
+            </if>
+            <if test="devicename!=null and devicename!=''">
+                and devicename=#{devicename}
+            </if>
+            <if test="start!=null and end!=null">
+                and maintaintime between #{start} and #{end}
+            </if>
+            <if test="userid!=null and userid!=''">
+                and maintainuserid=#{userid}
+            </if>
+        </where>
+        GROUP BY
+        m.deviceid,
+        m.maintainuserid
+    </select>
+
+
+</mapper>

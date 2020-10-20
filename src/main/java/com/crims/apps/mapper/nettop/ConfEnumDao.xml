@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crims.apps.dao.nettop.ConfEnumDao">
+
+    <select id="findTypename" parameterType="com.crims.apps.model.nettop.ConfEnum" resultType="String">
+ SELECT ITEM_NAME FROM conf_enum WHERE ITEM_VALUE = #{itemValue} and ID = #{id}
+   </select>
+    <select id="findMainTypename" parameterType="com.crims.apps.model.nettop.ConfEnum" resultType="String">
+        SELECT ITEM_NAME FROM conf_enum WHERE ITEM_VALUE = #{itemValue}
+    </select>
+</mapper>
+

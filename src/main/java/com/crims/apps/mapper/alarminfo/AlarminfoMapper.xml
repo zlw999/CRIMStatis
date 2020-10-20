@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crims.apps.dao.alarminfo.AlarminfoDao">
+    <select id="findAlarm" resultType="com.crims.apps.model.alarminfo.Alarminfo" parameterType="com.crims.apps.model.alarminfo.TjAlarm">
+SELECT
+a.devicename,
+a.AlarmLevel,
+Count(deviceid) AS counts,
+a.AlarmType,
+a.AlarmTime,
+a.deviceid
+FROM
+rec_alarminfo a
+        <where>
+
+            <if test="start!=null and end!=null">
+                and a.AlarmTime between #{start} and #{end}
+            </if>
+
+        </where>
+GROUP BY
+deviceid,
+AlarmType,
+AlarmLevel
+union all
+SELECT
+h.devicename,
+h.AlarmLevel,
+Count(deviceid) AS counts,
+h.AlarmType,
+h.AlarmTime,
+h.deviceid
+FROM
+rec_alarminfohis h
+        <where>
+
+            <if test="start!=null and end!=null">
+                and h.AlarmTime between #{start} and #{end}
+            </if>
+
+        </where>
+GROUP BY
+deviceid,
+AlarmType,
+AlarmLevel
+
+    </select>
+
+
+
+
+    <select id="findAlarmCondition" resultType="com.crims.apps.model.alarminfo.Alarminfo" parameterType="com.crims.apps.model.alarminfo.TjAlarm">
+        SELECT
+        a.devicename,
+        a.AlarmLevel,
+        Count(deviceid) AS counts,
+        a.AlarmType,
+        a.AlarmTime,
+        a.deviceid
+        FROM
+        rec_alarminfo a
+        <where>
+            <if test="did!=null and did!=''">
+                and a.deviceid like '%${did}%'
+            </if>
+            <if test="devicename!=null and devicename!=''">
+                and a.devicename=#{devicename}
+            </if>
+            <if test="start!=null and end!=null">
+                and a.AlarmTime between #{start} and #{end}
+            </if>
+            <if test="alarmlevel!=null and alarmlevel!=''">
+                and a.alarmlevel=#{alarmlevel}
+            </if>
+            <if test="AlarmType!=null and AlarmType!=''">
+                and a.AlarmType like '%${AlarmType}%'
+            </if>
+        </where>
+        GROUP BY
+        deviceid,
+        AlarmType,
+        AlarmLevel
+        union all
+        SELECT
+        h.devicename,
+        h.AlarmLevel,
+        Count(deviceid) AS counts,
+        h.AlarmType,
+        h.AlarmTime,
+        h.deviceid
+        FROM
+        rec_alarminfohis h
+        <where>
+            <if test="did!=null and did!=''">
+                and h.deviceid like '%${did}%'
+            </if>
+            <if test="devicename!=null and devicename!=''">
+                and h.devicename=#{devicename}
+            </if>
+            <if test="start!=null and end!=null">
+                and h.AlarmTime between #{start} and #{end}
+            </if>
+            <if test="alarmlevel!=null and alarmlevel!=''">
+                and h.alarmlevel=#{alarmlevel}
+            </if>
+            <if test="AlarmType!=null and AlarmType!=''">
+                and h.AlarmType like '%${AlarmType}%'
+            </if>
+        </where>
+        GROUP BY
+        deviceid,
+        AlarmType,
+        AlarmLevel
+
+    </select>
+</mapper>

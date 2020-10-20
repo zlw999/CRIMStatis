@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crims.apps.dao.nettop.ConfNodeareaDao">
+
+   <select id="findAll" resultType="com.crims.apps.model.nettop.ConfNodearea">
+       select * from conf_nodearea
+   </select>
+    <select id="findNodeNameById" parameterType="String" resultType="String">
+        select nodename from conf_nodearea where nodeid = #{nodeid}
+    </select>
+
+</mapper>

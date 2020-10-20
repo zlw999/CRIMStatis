@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crims.apps.dao.confinfo.DDManDao">
+
+  <resultMap id="ConfEnum" type="com.crims.apps.model.confinfo.ConfEnum">
+    <result column="ID" jdbcType="CHAR" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="ITEM_VALUE" jdbcType="VARCHAR" property="item_value" />
+    <result column="ITEM_NAME" jdbcType="VARCHAR" property="item_name" />
+    <result column="COUNT_TRAINEE" jdbcType="DOUBLE" property="count_trainee" />
+    <result column="abbreviate" jdbcType="VARCHAR" property="abbreviate" />
+    <result column="dsp" jdbcType="VARCHAR" property="dsp" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    ID, NAME, ITEM_VALUE, ITEM_NAME, COUNT_TRAINEE, abbreviate, dsp
+  </sql>
+
+  <select id="getItemName" parameterType="map" resultType="java.lang.String">
+      SELECT ITEM_NAME FROM conf_enum
+      WHERE ITEM_VALUE = #{itemValue,jdbcType=VARCHAR} and ID = #{id,jdbcType=VARCHAR}
+  </select>
+
+</mapper>

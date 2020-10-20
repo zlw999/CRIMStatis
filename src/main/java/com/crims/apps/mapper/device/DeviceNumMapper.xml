@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crims.apps.dao.device.DeviceNumDao">
+    <resultMap id="BaseResultMap" type="com.crims.apps.model.device.DeviceNum">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="areaid" jdbcType="VARCHAR" property="areaid" />
+        <result column="areaname" jdbcType="VARCHAR" property="areaname" />
+        <result column="lineid" jdbcType="VARCHAR" property="lineid" />
+        <result column="linename" jdbcType="VARCHAR" property="linename" />
+        <result column="stationid" jdbcType="VARCHAR" property="stationid" />
+        <result column="stationname" jdbcType="VARCHAR" property="stationname" />
+        <result column="factoryid" jdbcType="VARCHAR" property="factoryid" />
+        <result column="factoryname" jdbcType="VARCHAR" property="factoryname" />
+        <result column="dmtype" jdbcType="VARCHAR" property="dmtype" />
+        <result column="dstype" jdbcType="VARCHAR" property="dstype" />
+        <result column="devicenum" jdbcType="INTEGER" property="devicenum" />
+        <result column="TJdate" jdbcType="DATE" property="tjdate" />
+        <result column="statisflag" jdbcType="VARCHAR" property="statisflag" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, areaid, areaname, lineid, linename, stationid, stationname, factoryid, factoryname,
+        dmtype, dstype, devicenum, TJdate
+    </sql>
+
+    <select id="getAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from rec_tjdevicenum
+    </select>
+
+    <select id="getDeviceNumByDate" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List" />
+        from rec_tjdevicenum where TJdate = #{date,jdbcType=DATE} and statisflag = #{statisflag,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getDeviceNumList" resultMap="BaseResultMap" parameterType="com.crims.apps.model.device.DeviceNum">
+        select
+        <include refid="Base_Column_List" />
+        from rec_tjdevicenum
+        <where>1=1
+            <if test="areaid != null and areaid != ''">
+                and areaid = #{areaid,jdbcType=VARCHAR}
+            </if>
+            <if test="lineid != null and lineid != ''">
+                and lineid = #{lineid,jdbcType=VARCHAR}
+            </if>
+            <if test="stationid != null and stationid != ''">
+                and stationid = #{stationid,jdbcType=VARCHAR}
+            </if>
+            <if test="factoryid != null and factoryid != ''">
+                and factoryid = #{factoryid,jdbcType=VARCHAR}
+            </if>
+            <if test="dmtype != null and dmtype != ''">
+                and dmtype = #{dmtype,jdbcType=VARCHAR}
+            </if>
+            <if test="dstype != null and dstype != ''">
+                and dstype = #{dstype,jdbcType=VARCHAR}
+            </if>
+            <if test="statisflag != null">
+                and statisflag = #{statisflag,jdbcType=VARCHAR}
+            </if>
+            <if test="tjdate != null">
+                and TJdate = #{tjdate,jdbcType=DATE}
+            </if>
+        </where>
+    </select>
+
+    <select id="getDeviceNumSelect" resultMap="BaseResultMap" parameterType="com.crims.apps.model.device.DeviceNum">
+        select
+        <include refid="Base_Column_List" />
+        from rec_tjdevicenum
+        <where>1=1
+            <choose>
+                <when test="areaid != null and areaid != ''">
+                    and areaid = #{areaid,jdbcType=VARCHAR}
+                </when>
+                <otherwise>
+                    and ISNULL(areaid)
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="lineid != null and lineid != ''">
+                    and lineid = #{lineid,jdbcType=VARCHAR}
+                </when>
+                <otherwise>
+                    and ISNULL(lineid)
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="stationid != null and stationid != ''">
+                    and stationid = #{stationid,jdbcType=VARCHAR}
+                </when>
+                <otherwise>
+                    and ISNULL(stationid)
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="factoryid != null and factoryid != ''">
+                    and factoryid = #{factoryid,jdbcType=VARCHAR}
+                </when>
+                <otherwise>
+                    and ISNULL(factoryid)
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="dmtype != null and dmtype != ''">
+                    and dmtype = #{dmtype,jdbcType=VARCHAR}
+                </when>
+                <otherwise>
+                    and ISNULL(dmtype)
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="dstype != null and dstype != ''">
+                    and dstype = #{dstype,jdbcType=VARCHAR}
+                </when>
+                <otherwise>
+                    and ISNULL(dstype)
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="statisflag != null and statisflag != ''">
+                    and statisflag = #{statisflag,jdbcType=VARCHAR}
+                </when>
+                <otherwise>
+                    and ISNULL(statisflag)
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="tjdate != null">
+                    and TJdate = #{tjdate,jdbcType=DATE}
+                </when>
+            </choose>
+        </where>
+    </select>
+
+    <insert id="insertDeviceNum" parameterType="com.crims.apps.model.device.DeviceNum">
+        insert into rec_tjdevicenum
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="areaid != null">
+                areaid,
+            </if>
+            <if test="areaname != null">
+                areaname,
+            </if>
+            <if test="lineid != null">
+                lineid,
+            </if>
+            <if test="linename != null">
+                linename,
+            </if>
+            <if test="stationid != null">
+                stationid,
+            </if>
+            <if test="stationname != null">
+                stationname,
+            </if>
+            <if test="factoryid != null">
+                factoryid,
+            </if>
+            <if test="factoryname != null">
+                factoryname,
+            </if>
+            <if test="dmtype != null">
+                dmtype,
+            </if>
+            <if test="dstype != null">
+                dstype,
+            </if>
+            <if test="devicenum != null">
+                devicenum,
+            </if>
+            <if test="statisflag != null">
+                statisflag,
+            </if>
+            <if test="tjdate != null">
+                TJdate,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="areaid != null">
+                #{areaid,jdbcType=VARCHAR},
+            </if>
+            <if test="areaname != null">
+                #{areaname,jdbcType=VARCHAR},
+            </if>
+            <if test="lineid != null">
+                #{lineid,jdbcType=VARCHAR},
+            </if>
+            <if test="linename != null">
+                #{linename,jdbcType=VARCHAR},
+            </if>
+            <if test="stationid != null">
+                #{stationid,jdbcType=VARCHAR},
+            </if>
+            <if test="stationname != null">
+                #{stationname,jdbcType=VARCHAR},
+            </if>
+            <if test="factoryid != null">
+                #{factoryid,jdbcType=VARCHAR},
+            </if>
+            <if test="factoryname != null">
+                #{factoryname,jdbcType=VARCHAR},
+            </if>
+            <if test="dmtype != null">
+                #{dmtype,jdbcType=VARCHAR},
+            </if>
+            <if test="dstype != null">
+                #{dstype,jdbcType=VARCHAR},
+            </if>
+            <if test="devicenum != null">
+                #{devicenum,jdbcType=INTEGER},
+            </if>
+            <if test="statisflag != null">
+                #{statisflag,jdbcType=VARCHAR},
+            </if>
+            <if test="tjdate != null">
+                #{tjdate,jdbcType=DATE},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateDeviceNum" parameterType="com.crims.apps.model.device.DeviceNum">
+        update rec_tjdevicenum
+        set devicenum = #{devicenum,jdbcType=INTEGER},
+          TJdate = #{tjdate,jdbcType=DATE}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <delete id="deleteDeviceNum" parameterType="map">
+        delete from  rec_tjdevicenum where TJdate = #{date,jdbcType=DATE} and statisflag = #{statisflag,jdbcType=VARCHAR}
+    </delete>
+</mapper>

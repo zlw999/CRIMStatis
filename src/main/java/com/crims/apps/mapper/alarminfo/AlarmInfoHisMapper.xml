@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crims.apps.dao.alarminfo.AlarmInfoHisDao">
+  <resultMap id="BaseResultMap" type="com.crims.apps.model.alarminfo.AlarmInfoHis">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="appsvrid" jdbcType="VARCHAR" property="appsvrid" />
+    <result column="NodeAid" jdbcType="VARCHAR" property="nodeaid" />
+    <result column="NodeAName" jdbcType="VARCHAR" property="nodeaname" />
+    <result column="nodename" jdbcType="VARCHAR" property="nodename" />
+    <result column="deviceid" jdbcType="VARCHAR" property="deviceid" />
+    <result column="devicename" jdbcType="VARCHAR" property="devicename" />
+    <result column="mpid" jdbcType="VARCHAR" property="mpid" />
+    <result column="mpname" jdbcType="VARCHAR" property="mpname" />
+    <result column="AlarmIndex" jdbcType="VARCHAR" property="alarmindex" />
+    <result column="AlarmType" jdbcType="VARCHAR" property="alarmtype" />
+    <result column="AlarmLevel" jdbcType="VARCHAR" property="alarmlevel" />
+    <result column="AlarmTime" jdbcType="TIMESTAMP" property="alarmtime" />
+    <result column="AlarmDisTime" jdbcType="TIMESTAMP" property="alarmdistime" />
+    <result column="AlarmValue" jdbcType="VARCHAR" property="alarmvalue" />
+    <result column="AlarmAffirmUserid" jdbcType="VARCHAR" property="alarmaffirmuserid" />
+    <result column="AlarmAffirmUsername" jdbcType="VARCHAR" property="alarmaffirmusername" />
+    <result column="AlarmAffirmTime" jdbcType="TIMESTAMP" property="alarmaffirmtime" />
+    <result column="AlarmClearUserid" jdbcType="VARCHAR" property="alarmclearuserid" />
+    <result column="AlarmClearUsername" jdbcType="VARCHAR" property="alarmclearusername" />
+    <result column="AlarmClearTime" jdbcType="TIMESTAMP" property="alarmcleartime" />
+    <result column="AlarmReportUserid" jdbcType="VARCHAR" property="alarmreportuserid" />
+    <result column="AlarmReportUsername" jdbcType="VARCHAR" property="alarmreportusername" />
+    <result column="AlarmDsp" jdbcType="VARCHAR" property="alarmdsp" />
+    <result column="WOrderId" jdbcType="VARCHAR" property="worderid" />
+    <result column="GroupNodeCode" jdbcType="VARCHAR" property="groupnodecode" />
+    <result column="ipaddress" jdbcType="VARCHAR" property="ipaddress" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, appsvrid, NodeAid, NodeAName, nodename, deviceid, devicename, mpid, mpname, AlarmIndex, 
+    AlarmType, AlarmLevel, AlarmTime, AlarmDisTime, AlarmValue, AlarmAffirmUserid, AlarmAffirmUsername, 
+    AlarmAffirmTime, AlarmClearUserid, AlarmClearUsername, AlarmClearTime, AlarmReportUserid, 
+    AlarmReportUsername, AlarmDsp, WOrderId, GroupNodeCode,ipaddress
+  </sql>
+
+  <select id="getAlarmInfoHisList" parameterType="java.util.Map" resultMap="BaseResultMap">
+      select * from ((select * from rec_alarminfo) union all (select * from rec_alarminfohis)) a
+      where a.AlarmTime <![CDATA[>=]]> #{startDate,jdbcType = TIMESTAMP}
+      and a.AlarmDisTime <![CDATA[<=]]> #{endDate,jdbcType = TIMESTAMP} and a.AlarmDisTime != '2020-01-01 00:00:00'
+  </select>
+
+</mapper>

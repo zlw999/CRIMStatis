@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crims.apps.dao.device.DeviceNumLogDao">
+  <resultMap id="BaseResultMap" type="com.crims.apps.model.device.DeviceNumLog">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="date" jdbcType="DATE" property="date" />
+    <result column="userid" jdbcType="VARCHAR" property="userid" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="dsp" jdbcType="VARCHAR" property="dsp" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, date, userid, username, dsp
+  </sql>
+
+  <select id="getDeviceNumLogByDate" resultMap="BaseResultMap" parameterType="java.util.Date">
+    select
+    <include refid="Base_Column_List" />
+    from rec_tjdevicenumlog where date = #{date,jdbcType=DATE}
+  </select>
+
+  <insert id="insert" parameterType="com.crims.apps.model.device.DeviceNumLog">
+    insert into rec_tjdevicenumlog
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="date != null">
+        date,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="dsp != null">
+        dsp,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=DATE},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="dsp != null">
+        #{dsp,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="update" parameterType="com.crims.apps.model.device.DeviceNumLog">
+        update rec_tjdevicenumlog
+        set userid = #{userid,jdbcType=VARCHAR},
+          date = #{date,jdbcType=DATE},
+          username = #{username,jdbcType=VARCHAR},
+          dsp = #{dsp,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

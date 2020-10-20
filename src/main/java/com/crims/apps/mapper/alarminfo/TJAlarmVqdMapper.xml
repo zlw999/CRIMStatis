@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crims.apps.dao.alarminfo.TJAlarmVqdDao">
+    <resultMap id="BaseResultMap" type="com.crims.apps.model.alarminfo.TJAlarmVqd">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="vqdsrvid" jdbcType="VARCHAR" property="vqdsrvid" />
+        <result column="planvqdnum" jdbcType="INTEGER" property="planvqdnum" />
+        <result column="factvqdnum" jdbcType="INTEGER" property="factvqdnum" />
+        <result column="alarmtype" jdbcType="VARCHAR" property="alarmtype" />
+        <result column="alarmnum" jdbcType="INTEGER" property="alarmnum" />
+        <result column="vqddate" jdbcType="DATE" property="vqddate" />
+        <result column="areaid" jdbcType="VARCHAR" property="areaid" />
+        <result column="areaname" jdbcType="VARCHAR" property="areaname" />
+        <result column="lineid" jdbcType="VARCHAR" property="lineid" />
+        <result column="linename" jdbcType="VARCHAR" property="linename" />
+        <result column="stationid" jdbcType="VARCHAR" property="stationid" />
+        <result column="stationname" jdbcType="VARCHAR" property="stationname" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, vqdsrvid, planvqdnum, factvqdnum, alarmtype, alarmnum, vqddate, areaid, areaname,
+        lineid, linename, stationid, stationname
+    </sql>
+
+    <select id="getAll" resultMap="BaseResultMap">
+        select * from rec_tjalarmvqd
+    </select>
+
+    <select id="getTJAlarmByAreaID" parameterType="map" resultType="map">
+        select areaid,areaname,sum(alarmnum) AS alarmnum,max(planvqdnum) as planvqdnum,max(factvqdnum) as factvqdnum,vqddate
+        from rec_tjalarmvqd
+        <where>1=1
+        <if test="areaid != null and areaid != ''">
+            and areaid = #{areaid,jdbcType=VARCHAR}
+        </if>
+        <if test="vqddate != null">
+            and vqddate = #{vqddate,jdbcType=DATE}
+        </if>
+        </where>
+        group by areaid,vqddate order by vqddate desc
+    </select>
+
+    <select id="getTJAlarmByAIDAndLID" parameterType="map" resultType="map">
+        select areaid,areaname,lineid,linename,sum(alarmnum) AS alarmnum,max(planvqdnum) as planvqdnum,max(factvqdnum) as factvqdnum,vqddate
+        from rec_tjalarmvqd
+        <where>1=1
+            <if test="areaid != null and areaid != ''">
+                and areaid = #{areaid,jdbcType=VARCHAR}
+            </if>
+            <if test="lineid != null and lineid != ''">
+                and lineid = #{lineid,jdbcType=VARCHAR}
+            </if>
+            <if test="vqddate != null">
+                and vqddate = #{vqddate,jdbcType=DATE}
+            </if>
+        </where>
+        group by areaid,lineid,vqddate order by vqddate desc
+    </select>
+
+    <select id="getTJAlarmByAIDAndLIDAndSID" parameterType="map" resultType="map">
+        select areaid,areaname,lineid,linename,stationid,stationname,sum(alarmnum) AS alarmnum,max(planvqdnum) as planvqdnum,max(factvqdnum) as factvqdnum,vqddate
+        from rec_tjalarmvqd
+        <where>1=1
+            <if test="areaid != null and areaid != ''">
+                and areaid = #{areaid,jdbcType=VARCHAR}
+            </if>
+            <if test="lineid != null and lineid != ''">
+                and lineid = #{lineid,jdbcType=VARCHAR}
+            </if>
+            <if test="stationid != null and stationid != ''">
+                and stationid = #{stationid,jdbcType=VARCHAR}
+            </if>
+            <if test="vqddate != null">
+                and vqddate = #{vqddate,jdbcType=DATE}
+            </if>
+        </where>
+        group by areaid,lineid,stationid,vqddate order by vqddate desc
+    </select>
+
+    <select id="getTJAlarmByAll" parameterType="map" resultType="map">
+        select areaid,areaname,lineid,linename,stationid,stationname,alarmtype,
+            sum(alarmnum) AS alarmnum,max(planvqdnum) as planvqdnum,max(factvqdnum) as factvqdnum,vqddate
+        from rec_tjalarmvqd
+        <where>1=1
+            <if test="areaid != null and areaid != ''">
+                and areaid = #{areaid,jdbcType=VARCHAR}
+            </if>
+            <if test="lineid != null and lineid != ''">
+                and lineid = #{lineid,jdbcType=VARCHAR}
+            </if>
+            <if test="stationid != null and stationid != ''">
+                and stationid = #{stationid,jdbcType=VARCHAR}
+            </if>
+            <if test="alarmtype != null and alarmtype != ''">
+                and alarmtype = #{alarmtype,jdbcType=VARCHAR}
+            </if>
+            <if test="vqddate != null">
+                and vqddate = #{vqddate,jdbcType=DATE}
+            </if>
+        </where>
+        group by areaid,lineid,stationid,alarmtype,vqddate order by vqddate desc
+    </select>
+
+    <select id="getTJAlarmByAIDAndAType" parameterType="map" resultType="map">
+        select areaid,areaname,alarmtype,sum(alarmnum) AS alarmnum,max(planvqdnum) as planvqdnum,max(factvqdnum) as factvqdnum,vqddate
+        from rec_tjalarmvqd
+        <where>1=1
+            <if test="areaid != null and areaid != ''">
+                and areaid = #{areaid,jdbcType=VARCHAR}
+            </if>
+            <if test="alarmtype != null and alarmtype != ''">
+                and alarmtype = #{alarmtype,jdbcType=VARCHAR}
+            </if>
+            <if test="vqddate != null">
+                and vqddate = #{vqddate,jdbcType=DATE}
+            </if>
+        </where>
+        group by areaid,alarmtype,vqddate order by vqddate desc
+    </select>
+
+    <select id="getTJAlarmByAIDAndLIDAndAType" parameterType="map" resultType="map">
+        select areaid,areaname,lineid,linename,alarmtype,sum(alarmnum) AS alarmnum,max(planvqdnum) as planvqdnum,max(factvqdnum) as factvqdnum,vqddate
+        from rec_tjalarmvqd
+        <where>1=1
+            <if test="areaid != null and areaid != ''">
+                and areaid = #{areaid,jdbcType=VARCHAR}
+            </if>
+            <if test="lineid != null and lineid != ''">
+                and lineid = #{lineid,jdbcType=VARCHAR}
+            </if>
+            <if test="alarmtype != null and alarmtype != ''">
+                and alarmtype = #{alarmtype,jdbcType=VARCHAR}
+            </if>
+            <if test="vqddate != null">
+                and vqddate = #{vqddate,jdbcType=DATE}
+            </if>
+        </where>
+        group by areaid,lineid,alarmtype,vqddate order by vqddate desc
+    </select>
+
+    <select id="getTJAlarmByAType" parameterType="map" resultType="map">
+        select alarmtype,sum(alarmnum) AS alarmnum,max(planvqdnum) as planvqdnum,max(factvqdnum) as factvqdnum,vqddate
+        from rec_tjalarmvqd
+        <where>1=1
+            <if test="alarmtype != null and alarmtype != ''">
+                and alarmtype = #{alarmtype,jdbcType=VARCHAR}
+            </if>
+            <if test="vqddate != null">
+                and vqddate = #{vqddate,jdbcType=DATE}
+            </if>
+        </where>
+        group by alarmtype,vqddate order by vqddate desc
+    </select>
+</mapper>

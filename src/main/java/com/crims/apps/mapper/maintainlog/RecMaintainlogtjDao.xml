@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crims.apps.dao.maintainlog.RecMaintainlogtjDao">
+  <insert id="save" parameterType="com.crims.apps.model.maintainlog.RecMaintainlogtj">
+      insert into rec_maintainlogtj(deviceid,devicename,maintainnum,PeriodFlag,periodinfo,tjtime,userid,username,avgscore,dsp) values(#{deviceid},#{devicename},#{maintainnum},#{PeriodFlag},#{periodinfo},#{tjtime},#{userid},#{username},#{avgscore},#{dsp})
+  </insert>
+<select id="findLikeMain" parameterType="com.crims.apps.model.maintainlog.RecMaintainlogtj" resultType="com.crims.apps.model.maintainlog.RecMaintainlogtj">
+        select * from rec_maintainlogtj <where>
+    <if test="devicename!=null and devicename != ''">
+        and devicename = #{devicename}
+    </if>
+    <if test="did!=null and did!=''">
+        and deviceid like '%${did}%'
+    </if>
+
+</where>
+</select>
+    <select id="findAll" resultType="com.crims.apps.model.maintainlog.RecMaintainlogtj">
+        select id,deviceid,userid,username,devicename,avgscore,tjtime,PeriodFlag,periodinfo,dsp,SUM(maintainnum) as maintainnum  from rec_maintainlogtj where dsp!='无' group by devicename
+    </select>
+    <delete id="deleteAll" parameterType="com.crims.apps.model.maintainlog.RecMaintainlogtj">
+        delete from rec_maintainlogtj where id=#{id} and deviceid=#{deviceid} and PeriodFlag = #{PeriodFlag} and periodinfo = #{periodinfo}
+    </delete>
+    <delete id="delete" parameterType="com.crims.apps.model.maintainlog.RecMaintainlogtj">
+        delete from rec_maintainlogtj where PeriodFlag = #{PeriodFlag} and periodinfo = #{periodinfo}
+    </delete>
+    <select id="findMainlogtj" parameterType="com.crims.apps.model.maintainlog.RecMaintainlogtj" resultType="com.crims.apps.model.maintainlog.RecMaintainlogtj">
+        select deviceid,devicename,PeriodFlag,periodinfo,tjtime,userid,username,avgscore,dsp,maintainnum as counts from rec_maintainlogtj <where> dsp != '无'
+        <if test="devicename!=null and devicename != ''">
+            and devicename = #{devicename}
+        </if>
+        <if test="did!=null and did!=''">
+            and deviceid like '%${did}%'
+        </if>
+        <if test="PeriodFlag!=null and PeriodFlag!=''">
+            and PeriodFlag = #{PeriodFlag}
+        </if>
+        <if test="PeriodFlag!=null and PeriodFlag!=''">
+            and periodinfo = #{periodinfo}
+        </if>
+        <if test="userid!=null and userid!=''">
+            and userid = #{userid}
+        </if>
+    </where> order by tjtime desc
+    </select>
+<select id="finduser" resultType="com.crims.apps.model.maintainlog.RecMaintainlogtj">
+    SELECT *,sum(maintainnum) AS counts FROM rec_maintainlogtj where dsp!='无' group by username,deviceid,periodinfo
+</select>
+    <select id="find" resultType="com.crims.apps.model.maintainlog.RecMaintainlogtj">
+    SELECT *,sum(maintainnum) AS counts FROM rec_maintainlogtj where dsp!='无' group by deviceid,periodinfo
+</select>
+</mapper>

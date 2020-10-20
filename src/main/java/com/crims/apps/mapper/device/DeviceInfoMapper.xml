@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crims.apps.dao.device.DeviceInfoDao">
+  <resultMap id="BaseResultMap" type="com.crims.apps.model.device.DeviceInfo">
+    <result column="deviceid" jdbcType="VARCHAR" property="deviceid" />
+    <result column="devicename" jdbcType="VARCHAR" property="devicename" />
+    <result column="groupname" jdbcType="VARCHAR" property="groupname" />
+    <result column="mappingdeviceid" jdbcType="VARCHAR" property="mappingdeviceid" />
+    <result column="deviceType" jdbcType="VARCHAR" property="deviceType" />
+    <result column="devicemtype" jdbcType="VARCHAR" property="devicemtype" />
+    <result column="version" jdbcType="VARCHAR" property="version" />
+    <result column="factoryid" jdbcType="VARCHAR" property="factoryid" />
+    <result column="location" jdbcType="VARCHAR" property="location" />
+    <result column="posex" jdbcType="INTEGER" property="posex" />
+    <result column="posey" jdbcType="INTEGER" property="posey" />
+    <result column="longitude" jdbcType="VARCHAR" property="longitude" />
+    <result column="latitude" jdbcType="VARCHAR" property="latitude" />
+    <result column="altitude" jdbcType="VARCHAR" property="altitude" />
+    <result column="isLockedXY" jdbcType="INTEGER" property="isLockedXY" />
+    <result column="mac" jdbcType="VARCHAR" property="mac" />
+    <result column="ipaddress" jdbcType="VARCHAR" property="ipaddress" />
+    <result column="subnetmask" jdbcType="VARCHAR" property="subnetmask" />
+    <result column="gateway" jdbcType="VARCHAR" property="gateway" />
+    <result column="lisport" jdbcType="INTEGER" property="lisport" />
+    <result column="channelnum" jdbcType="INTEGER" property="channelnum" />
+    <result column="dsp" jdbcType="VARCHAR" property="dsp" />
+    <result column="loginuser" jdbcType="VARCHAR" property="loginuser" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="softwarever" jdbcType="VARCHAR" property="softwarever" />
+    <result column="hardwarever" jdbcType="VARCHAR" property="hardwarever" />
+    <result column="managerprotocol" jdbcType="VARCHAR" property="managerprotocol" />
+    <result column="snmpversion" jdbcType="INTEGER" property="snmpversion" />
+    <result column="snmpport" jdbcType="INTEGER" property="snmpport" />
+    <result column="readcommit" jdbcType="VARCHAR" property="readcommit" />
+    <result column="writecommit" jdbcType="VARCHAR" property="writecommit" />
+    <result column="alarmrate" jdbcType="VARCHAR" property="alarmrate" />
+    <result column="isenablesnmpproxy" jdbcType="INTEGER" property="isenablesnmpproxy" />
+    <result column="snmpproxyip" jdbcType="VARCHAR" property="snmpproxyip" />
+    <result column="systemid" jdbcType="INTEGER" property="systemid" />
+    <result column="systemoid" jdbcType="VARCHAR" property="systemoid" />
+    <result column="systemdesc" jdbcType="VARCHAR" property="systemdesc" />
+    <result column="snmpv3username" jdbcType="VARCHAR" property="snmpv3username" />
+    <result column="snmpv3securitylevel" jdbcType="INTEGER" property="snmpv3securitylevel" />
+    <result column="snmpv3authprotocol" jdbcType="VARCHAR" property="snmpv3authprotocol" />
+    <result column="snmpv3contextname" jdbcType="VARCHAR" property="snmpv3contextname" />
+    <result column="srcnodeid" jdbcType="VARCHAR" property="srcnodeid" />
+    <result column="mainstreamframerate" jdbcType="INTEGER" property="mainstreamframerate" />
+    <result column="mainstreamgop" jdbcType="INTEGER" property="mainstreamgop" />
+    <result column="usestate" jdbcType="INTEGER" property="usestate" />
+    <result column="operateaction" jdbcType="INTEGER" property="operateaction" />
+    <result column="operateuserid" jdbcType="VARCHAR" property="operateuserid" />
+    <result column="operateusername" jdbcType="VARCHAR" property="operateusername" />
+    <result column="lastModifyTime" jdbcType="TIMESTAMP" property="lastModifyTime" />
+    <result column="startcno" jdbcType="INTEGER" property="startcno" />
+  </resultMap>
+  <sql id="Base_Column_List">
+      deviceid, devicename, groupname, mappingdeviceid, deviceType, devicemtype,
+      version, factoryid, location, posex,posey,longitude,latitude,altitude,isLockedXY,
+      mac,ipaddress, subnetmask, gateway,lisport, channelnum, dsp, loginuser, password,
+      softwarever, hardwarever, managerprotocol,snmpversion,snmpport,readcommit,
+      writecommit,alarmrate,isenablesnmpproxy,snmpproxyip,systemid,systemoid,systemdesc,
+      snmpv3username,snmpv3securitylevel,snmpv3authprotocol,snmpv3contextname,srcnodeid, mainstreamframerate,
+      mainstreamgop, usestate,operateaction, operateuserid, operateusername,lastModifyTime,startcno
+  </sql>
+  
+  <select id="getDeviceInfoList" resultMap="BaseResultMap">
+    select     
+    <include refid="Base_Column_List" />
+    from conf_device 
+  </select>
+
+  <select id="getDeviceInfo" parameterType="java.lang.String" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from conf_device where deviceid = #{deviceID,jdbcType=VARCHAR}
+  </select>
+</mapper>

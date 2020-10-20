@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crims.apps.dao.confinfo.NodeConfDao">
+    <resultMap id="ConfNode" type="com.crims.apps.model.confinfo.ConfNode">
+        <result column="nodeid" jdbcType="VARCHAR" property="nodeid" />
+        <result column="nodename" jdbcType="VARCHAR" property="nodename" />
+        <result column="usestate" jdbcType="INTEGER" property="usestate" />
+        <result column="operateaction" jdbcType="INTEGER" property="operateaction" />
+        <result column="operateuserid" jdbcType="VARCHAR" property="operateuserid" />
+        <result column="operateusername" jdbcType="VARCHAR" property="operateusername" />
+        <result column="lastmodifytime" jdbcType="TIMESTAMP" property="lastmodifytime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+       nodeid, nodename, usestate, operateaction, operateuserid, operateusername, lastmodifytime
+    </sql>
+
+    <select id="getNodeName" parameterType="java.lang.String" resultType="java.lang.String">
+        select nodename from conf_nodearea
+        where nodeid = #{nodeid,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

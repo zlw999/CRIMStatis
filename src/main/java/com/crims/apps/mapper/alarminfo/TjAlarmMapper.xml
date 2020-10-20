@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crims.apps.dao.alarminfo.TjAlarmDao">
+    <select id="findtjAlarm" parameterType="com.crims.apps.model.alarminfo.TjAlarm" resultType="com.crims.apps.model.alarminfo.TjAlarm">
+        select * from rec_tjalarm <where>
+        <if test="devicename!=null and devicename != ''">
+            and devicename = #{devicename}
+        </if>
+        <if test="did!=null and did!=''">
+            and deviceid like '%${did}%'
+        </if>
+        <if test="PeriodFlag!=null and PeriodFlag!=''">
+            and PeriodFlag = #{PeriodFlag}
+        </if>
+        <if test="periodinfo!=null and periodinfo!=''">
+            and periodinfo = #{periodinfo}
+        </if>
+        <if test="alarmlevel!=null and alarmlevel!=''">
+            and alarmlevel = #{alarmlevel}
+        </if>
+        <if test="alarmmaintype!=null and alarmmaintype!=''">
+            and alarmmaintype = #{alarmmaintype}
+        </if>
+        <if test="alarmsubtype!=null and alarmsubtype!=''">
+            and alarmsubtype = #{alarmsubtype}
+        </if>
+    </where> order by TJdate desc
+    </select>
+
+    <delete id="deleteAll" parameterType="com.crims.apps.model.alarminfo.TjAlarm">
+         delete from rec_tjalarm where id=#{id} and deviceid=#{deviceid} and PeriodFlag = #{PeriodFlag} and periodinfo = #{periodinfo}
+    </delete>
+
+    <delete id="delete" parameterType="com.crims.apps.model.alarminfo.TjAlarm">
+         delete from rec_tjalarm where  PeriodFlag = #{PeriodFlag} and periodinfo = #{periodinfo}
+    </delete>
+    <select id="findAll" resultType="com.crims.apps.model.alarminfo.TjAlarm">
+        select * from rec_tjalarm where dsp!='无'
+    </select>
+    <insert id="save" parameterType="com.crims.apps.model.alarminfo.TjAlarm">
+        insert into rec_tjalarm(areaid,areaname,lineid,linename,stationid,stationname,deviceid,devicename,alarmmaintype,alarmsubtype,alarmlevel,devicenum,TJdate,PeriodFlag,periodinfo,dsp,typename) values(#{areaid},#{areaname},#{lineid},#{linename},#{stationid},#{stationname},#{deviceid},#{devicename},#{alarmmaintype},#{alarmsubtype},#{alarmlevel},#{devicenum},#{TJdate},#{PeriodFlag},#{periodinfo},#{dsp},#{typename})
+    </insert>
+
+
+
+    <select id="tjlie" parameterType="String" resultType="com.crims.apps.model.alarminfo.TjAlarm">
+     select dsp,id,areaname,deviceid,areaid,lineid,stationid,linename,stationname,devicename,periodinfo,typename,alarmlevel,count(*) as devicenum from rec_tjalarm where dsp!='无' group by ${String}
+
+    </select>
+
+</mapper>
